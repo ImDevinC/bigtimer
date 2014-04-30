@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BigTimer</string>
+
+    <string name="action_lap">Lap</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_start">Start</string>
+    <string name="action_stop">Stop</string>
+
+    <string name="desc_resize">Resize the frames</string>
+
+    <string name="total">Total: 00:00.0</string>
+
+    <string name="ga_id">UA-47032439-3</string>
+</resources>

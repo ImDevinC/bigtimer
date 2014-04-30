@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <fragment
+                android:name="com.layer8apps.stopwatch.main.fragments.ResetFragment"
+                android:id="@+id/fragReset"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_reset"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/contLapFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <fragment
+                android:name="com.layer8apps.stopwatch.main.fragments.LapCounterFragment"
+                android:id="@+id/fragLapCount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_lapcount"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <fragment
+            android:name="com.layer8apps.stopwatch.main.fragments.TimeKeeperFragment"
+            android:id="@+id/fragTimeKeeper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_time" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+        <fragment
+            android:name="com.layer8apps.stopwatch.main.fragments.StartStopFragment"
+            android:id="@+id/fragStartStop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_startstop" />
+    </LinearLayout>
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rlTop"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal">-->
+            <!--<FrameLayout-->
+                <!--android:id="@+id/contResetFragment"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1">-->
+                <!--<fragment-->
+                    <!--android:name="com.layer8apps.stopwatch.main.fragments.ResetFragment"-->
+                    <!--android:id="@+id/fragReset"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:layout="@layout/fragment_reset"/>-->
+            <!--</FrameLayout>-->
+
+            <!--<FrameLayout-->
+                <!--android:id="@+id/contLapCountFragment"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1">-->
+                <!--<fragment-->
+                    <!--android:name="com.layer8apps.stopwatch.main.fragments.LapCounterFragment"-->
+                    <!--android:id="@+id/fragLapCount"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:layout="@layout/fragment_lapcount"/>-->
+            <!--</FrameLayout>-->
+        <!--</LinearLayout>-->
+    <!--</RelativeLayout>-->
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rlMiddle"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
+        <!--<fragment-->
+            <!--android:name="com.layer8apps.stopwatch.main.fragments.TimeKeeperFragment"-->
+            <!--android:id="@+id/fragTimeKeeper"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--tools:layout="@layout/fragment_time" />-->
+    <!--</RelativeLayout>-->
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rlBottom"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2">-->
+        <!--<fragment-->
+            <!--android:name="com.layer8apps.stopwatch.main.fragments.StartStopFragment"-->
+            <!--android:id="@+id/fragStartStop"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--tools:layout="@layout/fragment_startstop" />-->
+    <!--</RelativeLayout>-->
+
+</LinearLayout>

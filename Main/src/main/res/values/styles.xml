@@ -1,0 +1,13 @@
+<resources>
+
+    <style name="WhiteText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="WhiteText.Big">
+        <item name="android:textSize">56sp</item>
+    </style>
+
+</resources>

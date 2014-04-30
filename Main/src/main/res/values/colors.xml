@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_background">#333333</color>
+    <color name="lap_background">#4487AB</color>
+    <color name="laptime_background">#336680</color>
+    <color name="laptime_stopped_background">#80323D</color>
+    <color name="reset_background">#AB4352</color>
+    <color name="start_background">#4BAB43</color>
+    <color name="stop_background">#AB4343</color>
+</resources>
