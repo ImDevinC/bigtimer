@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_background"
-    android:gravity="center">
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/txtTotalTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total"
+        android:layout_centerHorizontal="true"
         style="@style/WhiteText"/>
 
     <TextView
@@ -19,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtTotalTime"
+        android:layout_centerHorizontal="true"
         android:text="00:00.0"
         style="@style/WhiteText.Big"/>
 

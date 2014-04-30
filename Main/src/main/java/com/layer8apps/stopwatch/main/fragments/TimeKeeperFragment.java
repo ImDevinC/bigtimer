@@ -7,9 +7,11 @@ import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.layer8apps.stopwatch.main.R;
+import com.layer8apps.stopwatch.main.activities.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +34,14 @@ public class TimeKeeperFragment extends Fragment {
     private TextView txtTotalTime;
     private TextView txtCurrentTime;
 
+    private void displayTime() {
+        String result = formatTimeString(lCurrentTime);
+        txtCurrentTime.setText(result);
+
+        result = formatTimeString(lTotalTime);
+        txtTotalTime.setText("Total: " + result);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_time, container, false);
@@ -46,16 +56,24 @@ public class TimeKeeperFragment extends Fragment {
         return view;
     }
 
-    public void startTimer() {
-        txtTotalTime.setText(START_TOTAL_TIME);
-        txtCurrentTime.setText(START_LAP_TIME);
-        lStartTime = SystemClock.elapsedRealtime();
-        handler.postDelayed(updateTimerMethod, 0);
+    private String formatTimeString(long time) {
+        String result = String.format("%02d:%02d.%02d",
+                TimeUnit.MILLISECONDS.toMinutes(time),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)),
+                TimeUnit.MILLISECONDS.toMillis(time) -
+                        TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(time))
+        );
+
+        if (result.indexOf(".") > 0 && result.length() - result.indexOf(".") > 1) {
+            result = result.substring(0, result.indexOf(".") + 2);
+        }
+
+        return result;
     }
 
-    public void stopTimer() {
-        lTimeSwap = lCurrentTime;
-        handler.removeCallbacks(updateTimerMethod);
+    public String getLapTime() {
+        return formatTimeString(lCurrentTime);
     }
 
     public void resetCounter() {
@@ -74,32 +92,50 @@ public class TimeKeeperFragment extends Fragment {
         lTimeSwap = 0L;
     }
 
-    public String getLapTime() {
-        return formatTimeString(lCurrentTime);
+    public void startTimer() {
+        txtTotalTime.setText(START_TOTAL_TIME);
+        txtCurrentTime.setText(START_LAP_TIME);
+        lStartTime = SystemClock.elapsedRealtime();
+        handler.postDelayed(updateTimerMethod, 0);
     }
 
-    private void displayTime() {
-        String result = formatTimeString(lCurrentTime);
-        txtCurrentTime.setText(result);
-
-        result = formatTimeString(lTotalTime);
-        txtTotalTime.setText("Total: " + result);
+    public void stopTimer() {
+        lTimeSwap = lCurrentTime;
+        handler.removeCallbacks(updateTimerMethod);
     }
 
-    private String formatTimeString(long time) {
-        String result = String.format("%02d:%02d.%02d",
-                TimeUnit.MILLISECONDS.toMinutes(time),
-                TimeUnit.MILLISECONDS.toSeconds(time) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)),
-                TimeUnit.MILLISECONDS.toMillis(time) -
-                        TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(time))
-        );
+    public void increaseFont() {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+        params.addRule(RelativeLayout.BELOW, R.id.txtTotalTime);
 
-        if (result.indexOf(".") > 0 && result.length() - result.indexOf(".") > 1) {
-            result = result.substring(0, result.indexOf(".") + 2);
-        }
+        txtCurrentTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_Big);
+        txtCurrentTime.setLayoutParams(params);
 
-        return result;
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+
+        txtTotalTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText);
+        txtTotalTime.setLayoutParams(params);
+    }
+
+    public void shrinkFont() {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+
+        txtCurrentTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_MediumBig);
+        txtCurrentTime.setLayoutParams(params);
+
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, R.id.txtThisLap);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+
+        txtTotalTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_Small);
+        txtTotalTime.setLayoutParams(params);
     }
 
     private Runnable updateTimerMethod = new Runnable() {

@@ -27,6 +27,13 @@ public class LapCounterFragment extends ListFragment {
     private OnImageClickedListener mOnImageClickedListener;
     private ImageView imgResize;
 
+    private enum WindowState {
+        NORMAL,
+        EXPANDED
+    }
+
+    private WindowState state = WindowState.NORMAL;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -48,13 +55,13 @@ public class LapCounterFragment extends ListFragment {
             return null;
         }
 
-//        imgResize = (ImageView) view.findViewById(R.id.imgResize);
-//        imgResize.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mOnImageClickedListener.onImageClicked();
-//            }
-//        });
+        imgResize = (ImageView) view.findViewById(R.id.imgResize);
+        imgResize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnImageClickedListener.onImageClicked();
+            }
+        });
 
         return view;
     }
@@ -88,6 +95,16 @@ public class LapCounterFragment extends ListFragment {
         imgResize.setImageDrawable(getResources().getDrawable(id));
     }
 
+    public void increaseFont() {
+        state = WindowState.EXPANDED;
+        imgResize.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_off));
+    }
+
+    public void shrinkFont() {
+        state = WindowState.NORMAL;
+        imgResize.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_on));
+    }
+
     public interface OnImageClickedListener {
         public void onImageClicked();
     }
@@ -112,6 +129,12 @@ public class LapCounterFragment extends ListFragment {
             TextView txtLap = (TextView) row.findViewById(R.id.txtLapRow);
 
             txtLap.setText(laps.get(position));
+
+            if (state == WindowState.NORMAL) {
+                txtLap.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText);
+            } else {
+                txtLap.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_Big);
+            }
 
             return row;
         }

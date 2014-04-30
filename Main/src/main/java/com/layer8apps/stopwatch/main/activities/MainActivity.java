@@ -2,11 +2,13 @@ package com.layer8apps.stopwatch.main.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.layer8apps.stopwatch.main.BuildConfig;
 import com.layer8apps.stopwatch.main.R;
 import com.layer8apps.stopwatch.main.fragments.LapCounterFragment;
 import com.layer8apps.stopwatch.main.fragments.ResetFragment;
@@ -19,25 +21,42 @@ import com.layer8apps.stopwatch.main.fragments.TimeKeeperFragment;
 public class MainActivity extends Activity implements StartStopFragment.OnClickListener,
         ResetFragment.OnClickListener, LapCounterFragment.OnImageClickedListener {
 
-    private enum WindowState {
-        NORMAL,
-        EXPANDED
-    }
-
     private StartStopFragment ssf;
     private TimeKeeperFragment tkf;
     private ResetFragment rf;
     private LapCounterFragment lcf;
 
-    private LinearLayout contLapFragment;
+    private LinearLayout llTopContainer;
+    private LinearLayout llMiddleContainer;
+    private LinearLayout llBottomContainer;
+    private LinearLayout llResetContainer;
+    private LinearLayout llLapCountContainer;
 
-    private WindowState currentState = WindowState.NORMAL;
+    private enum WindowState {
+        NORMAL,
+        EXPANDED
+    }
 
-    private  LinearLayout.LayoutParams PARAMS = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 8f);
+    private WindowState state = WindowState.NORMAL;
 
     private void expandWindow() {
-        contLapFragment.setLayoutParams(PARAMS);
+        llTopContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, .7f));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, .15f);
+        llMiddleContainer.setLayoutParams(params);
+        llBottomContainer.setLayoutParams(params);
+
+        llResetContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, .2f));
+        llLapCountContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, .8f));
+
+        tkf.shrinkFont();
+        lcf.increaseFont();
+
+        state = WindowState.EXPANDED;
     }
 
     @Override
@@ -78,17 +97,23 @@ public class MainActivity extends Activity implements StartStopFragment.OnClickL
             lcf = new LapCounterFragment();
         }
 
-        contLapFragment = (LinearLayout) findViewById(R.id.contLapFragment);
+        llTopContainer = (LinearLayout) findViewById(R.id.llTopContainer);
+        llMiddleContainer = (LinearLayout) findViewById(R.id.llMiddleContainer);
+        llBottomContainer = (LinearLayout) findViewById(R.id.llBottomContainer);
+        llResetContainer = (LinearLayout) findViewById(R.id.llResetContainer);
+        llLapCountContainer = (LinearLayout) findViewById(R.id.llLapCountContainer);
 
-        sendAnalyticsReport();
+        if (!BuildConfig.DEBUG) {
+            sendAnalyticsReport();
+        }
     }
 
     @Override
     public void onImageClicked() {
-        if (currentState == WindowState.NORMAL) {
+        if (state == WindowState.NORMAL) {
             expandWindow();
         } else {
-//            shrinkWindow();
+            shrinkWindow();
         }
     }
 
@@ -99,6 +124,26 @@ public class MainActivity extends Activity implements StartStopFragment.OnClickL
         t.setScreenName(Activity.class.getName());
 
         t.send(new HitBuilders.AppViewBuilder().build());
+    }
+
+    private void shrinkWindow() {
+        llMiddleContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, .2f));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, .4f);
+        llTopContainer.setLayoutParams(params);
+        llBottomContainer.setLayoutParams(params);
+
+        llResetContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, .5f));
+        llLapCountContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, .5f));
+
+        tkf.increaseFont();
+        lcf.shrinkFont();
+
+        state = WindowState.NORMAL;
     }
 
     private void toggleLap() {
