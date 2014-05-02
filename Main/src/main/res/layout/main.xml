@@ -16,46 +16,42 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5">
-            <fragment
-                android:name="com.layer8apps.stopwatch.main.fragments.ResetFragment"
-                android:id="@+id/fragReset"
+            <FrameLayout
+                android:id="@+id/flResetFrame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/fragment_reset"/>
+                tools:layout="@layout/fragment_reset" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llLapCountContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5">
-            <fragment
-                android:name="com.layer8apps.stopwatch.main.fragments.LapCounterFragment"
-                android:id="@+id/fragLapCount"
+            <FrameLayout
+                android:id="@+id/flLapCounterFrame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/fragment_lapcount"/>
+                tools:layout="@layout/fragment_lapcount" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/llMiddleContainer"
+        android:id="@+id/llTimeKeeperContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".2">
-        <fragment
-            android:name="com.layer8apps.stopwatch.main.fragments.TimeKeeperFragment"
-            android:id="@+id/fragTimeKeeper"
+        <FrameLayout
+            android:id="@+id/flTimeKeeperFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/fragment_time" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/llBottomContainer"
+        android:id="@+id/llStartContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".4">
-        <fragment
-            android:name="com.layer8apps.stopwatch.main.fragments.StartStopFragment"
-            android:id="@+id/fragStartStop"
+        <FrameLayout
+            android:id="@+id/flStartFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/fragment_startstop" />

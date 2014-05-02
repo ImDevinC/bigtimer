@@ -1,6 +1,8 @@
 package com.layer8apps.stopwatch.main.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -16,9 +18,16 @@ import com.layer8apps.stopwatch.main.activities.MainActivity;
 import java.util.concurrent.TimeUnit;
 
 
-/**
- * Created by devin on 4/29/14.
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * Devin Collins (devin@imdevinc.com) wrote this file as part of the StopWatch
+ * project. As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it, you
+ * can buy me a beer in return.
+ * ----------------------------------------------------------------------------
  */
+
 public class TimeKeeperFragment extends Fragment {
 
     private final String START_TOTAL_TIME = "Total: 00:00.0";
@@ -33,6 +42,14 @@ public class TimeKeeperFragment extends Fragment {
 
     private TextView txtTotalTime;
     private TextView txtCurrentTime;
+    private MainActivity activity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        this.activity = (MainActivity) activity;
+    }
 
     private void displayTime() {
         String result = formatTimeString(lCurrentTime);
@@ -40,6 +57,31 @@ public class TimeKeeperFragment extends Fragment {
 
         result = formatTimeString(lTotalTime);
         txtTotalTime.setText("Total: " + result);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        if (savedInstanceState.containsKey("startTime")) {
+            lStartTime = savedInstanceState.getLong("startTime");
+        }
+        if (savedInstanceState.containsKey("currentTime")) {
+            lCurrentTime = savedInstanceState.getLong("currentTime");
+        }
+        if (savedInstanceState.containsKey("timeSwap")) {
+            lTimeSwap = savedInstanceState.getLong("timeSwap");
+        }
+        if (savedInstanceState.containsKey("totalTime")) {
+            lTotalTime = savedInstanceState.getLong("totalTime");
+        }
+        if (savedInstanceState.containsKey("timeSaved")) {
+            lTimeSaved = savedInstanceState.getLong("timeSaved");
+        }
     }
 
     @Override
@@ -53,7 +95,19 @@ public class TimeKeeperFragment extends Fragment {
         txtTotalTime = (TextView) view.findViewById(R.id.txtTotalTime);
         txtCurrentTime = (TextView) view.findViewById(R.id.txtThisLap);
 
+        updateTimer(false);
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("startTime", lStartTime);
+        outState.putLong("currentTime", lCurrentTime);
+        outState.putLong("timeSwap", lTimeSwap);
+        outState.putLong("totalTime", lTotalTime);
+        outState.putLong("timeSaved", lTimeSaved);
     }
 
     private String formatTimeString(long time) {
@@ -92,41 +146,42 @@ public class TimeKeeperFragment extends Fragment {
         lTimeSwap = 0L;
     }
 
-    public void startTimer() {
-        txtTotalTime.setText(START_TOTAL_TIME);
-        txtCurrentTime.setText(START_LAP_TIME);
-        lStartTime = SystemClock.elapsedRealtime();
-        handler.postDelayed(updateTimerMethod, 0);
+    public void updateTimer(boolean bResetTime) {
+        if (activity.getState() == MainActivity.RunningState.STOPPED) {
+            lTimeSwap = lCurrentTime;
+            handler.removeCallbacks(updateTimerMethod);
+        } else {
+            if (bResetTime) {
+                lStartTime = SystemClock.elapsedRealtime();
+            }
+
+            handler.postDelayed(updateTimerMethod, 0);
+        }
     }
 
-    public void stopTimer() {
-        lTimeSwap = lCurrentTime;
-        handler.removeCallbacks(updateTimerMethod);
-    }
-
-    public void increaseFont() {
+    public void increaseFont(Context context) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
         params.addRule(RelativeLayout.BELOW, R.id.txtTotalTime);
 
-        txtCurrentTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_Big);
+        txtCurrentTime.setTextAppearance(context, R.style.WhiteText_Big);
         txtCurrentTime.setLayoutParams(params);
 
         params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
 
-        txtTotalTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText);
+        txtTotalTime.setTextAppearance(context, R.style.WhiteText);
         txtTotalTime.setLayoutParams(params);
     }
 
-    public void shrinkFont() {
+    public void shrinkFont(Context context) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
 
-        txtCurrentTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_MediumBig);
+        txtCurrentTime.setTextAppearance(context, R.style.WhiteText_MediumBig);
         txtCurrentTime.setLayoutParams(params);
 
         params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -134,11 +189,12 @@ public class TimeKeeperFragment extends Fragment {
         params.addRule(RelativeLayout.BELOW, R.id.txtThisLap);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
 
-        txtTotalTime.setTextAppearance(getActivity().getBaseContext(), R.style.WhiteText_Small);
+        txtTotalTime.setTextAppearance(context, R.style.WhiteText_Small);
         txtTotalTime.setLayoutParams(params);
     }
 
     private Runnable updateTimerMethod = new Runnable() {
+
         @Override
         public void run() {
             lCurrentTime = (SystemClock.elapsedRealtime() - lStartTime) + lTimeSwap;

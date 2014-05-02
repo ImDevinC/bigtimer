@@ -9,22 +9,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.layer8apps.stopwatch.main.R;
+import com.layer8apps.stopwatch.main.activities.MainActivity;
 
-/**
- * Created by devin on 4/29/14.
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * Devin Collins (devin@imdevinc.com) wrote this file as part of the StopWatch
+ * project. As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it, you
+ * can buy me a beer in return.
+ * ----------------------------------------------------------------------------
  */
+
 public class StartStopFragment extends Fragment {
 
-    public enum State {
-        STOPPED,
-        STARTED,
-        PAUSED
-    }
-
-    private State state;
     private TextView txtAction;
     private View view;
     private OnClickListener mOnClickListener;
+    private MainActivity activity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -32,9 +34,16 @@ public class StartStopFragment extends Fragment {
 
         if (activity instanceof OnClickListener) {
             mOnClickListener = (OnClickListener) activity;
+            this.activity = (MainActivity) activity;
         } else {
             throw new ClassCastException(activity.toString() + " must implement OnClickListener");
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -45,43 +54,28 @@ public class StartStopFragment extends Fragment {
             return null;
         }
 
-        state = State.STOPPED;
-
         txtAction = (TextView) view.findViewById(R.id.txtStartStop);
 
         txtAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleAction(view.getId());
+                mOnClickListener.onClick(view.getId());
             }
         });
+
+        updateView();
 
         return view;
     }
 
-    private void toggleAction(int id) {
-        if (state == State.STOPPED) {
-            startTimer();
-        } else {
-            stopTimer();
+    public void updateView() {
+        if (activity.getState() == MainActivity.RunningState.STOPPED) {
+            view.setBackgroundColor(getResources().getColor(R.color.start_background));
+            txtAction.setText(getResources().getString(R.string.action_start));
+        } else if (activity.getState() == MainActivity.RunningState.RUNNING) {
+            view.setBackgroundColor(getResources().getColor(R.color.stop_background));
+            txtAction.setText(getResources().getString(R.string.action_stop));
         }
-        mOnClickListener.onClick(id);
-    }
-
-    private void startTimer() {
-        view.setBackgroundColor(getResources().getColor(R.color.stop_background));
-        txtAction.setText(getResources().getString(R.string.action_stop));
-        state = State.STARTED;
-    }
-
-    private void stopTimer() {
-        view.setBackgroundColor(getResources().getColor(R.color.start_background));
-        txtAction.setText(getResources().getString(R.string.action_start));
-        state = State.STOPPED;
-    }
-
-    public State getState() {
-        return state;
     }
 
     public interface OnClickListener {

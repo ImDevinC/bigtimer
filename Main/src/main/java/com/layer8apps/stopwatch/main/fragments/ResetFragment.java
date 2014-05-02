@@ -9,15 +9,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.layer8apps.stopwatch.main.R;
+import com.layer8apps.stopwatch.main.activities.MainActivity;
 
-/**
- * Created by devin on 4/29/14.
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * Devin Collins (devin@imdevinc.com) wrote this file as part of the StopWatch
+ * project. As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it, you
+ * can buy me a beer in return.
+ * ----------------------------------------------------------------------------
  */
+
 public class ResetFragment extends Fragment {
 
     private View view;
     private TextView txtAction;
     private OnClickListener mOnClickListener;
+    private MainActivity activity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -25,9 +34,15 @@ public class ResetFragment extends Fragment {
 
         if (activity instanceof OnClickListener) {
             mOnClickListener = (OnClickListener) activity;
+            this.activity = (MainActivity) activity;
         } else {
             throw new ClassCastException(activity.toString() + " must implement OnClickListener");
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -47,17 +62,19 @@ public class ResetFragment extends Fragment {
             }
         });
 
+        updateView();
+
         return view;
     }
 
-    public void enableLapMode() {
-        txtAction.setText("Lap");
-        view.setBackgroundColor(getResources().getColor(R.color.lap_background));
-    }
-
-    public void enableResetMode() {
-        txtAction.setText("Reset");
-        view.setBackgroundColor(getResources().getColor(R.color.reset_background));
+    public void updateView() {
+        if (activity.getState() == MainActivity.RunningState.STOPPED) {
+            txtAction.setText(getResources().getString(R.string.action_reset));
+            view.setBackgroundColor(getResources().getColor(R.color.reset_background));
+        } else if (activity.getState() == MainActivity.RunningState.RUNNING) {
+            txtAction.setText(getResources().getString(R.string.action_lap));
+            view.setBackgroundColor(getResources().getColor(R.color.lap_background));
+        }
     }
 
     public interface OnClickListener {

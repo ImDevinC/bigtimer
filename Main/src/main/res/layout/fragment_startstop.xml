@@ -12,6 +12,8 @@
         android:layout_height="fill_parent"
         android:text="@string/action_start"
         android:gravity="center"
+        android:paddingRight="23dp"
+        android:paddingLeft="23dp"
         style="@style/WhiteText.Big"/>
 
 </LinearLayout>
