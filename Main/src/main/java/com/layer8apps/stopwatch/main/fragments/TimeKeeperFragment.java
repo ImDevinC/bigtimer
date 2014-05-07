@@ -150,6 +150,7 @@ public class TimeKeeperFragment extends Fragment {
         if (activity.getState() == MainActivity.RunningState.STOPPED) {
             lTimeSwap = lCurrentTime;
             handler.removeCallbacks(updateTimerMethod);
+            displayTime();
         } else {
             if (bResetTime) {
                 lStartTime = SystemClock.elapsedRealtime();
