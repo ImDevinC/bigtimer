@@ -187,11 +187,12 @@ public class TimeKeeperFragment extends Fragment {
 
         params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.BELOW, R.id.txtThisLap);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
 
         txtTotalTime.setTextAppearance(context, R.style.WhiteText_Small);
         txtTotalTime.setLayoutParams(params);
+        txtTotalTime.setPadding(0, 0, 10, 0);
     }
 
     private Runnable updateTimerMethod = new Runnable() {
