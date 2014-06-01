@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,8 +120,16 @@ public class TimeKeeperFragment extends Fragment {
                         TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(time))
         );
 
-        if (result.indexOf(".") > 0 && result.length() - result.indexOf(".") > 1) {
-            result = result.substring(0, result.indexOf(".") + 2);
+        if (result.lastIndexOf(".") > 0) {
+            int iMs = Integer.parseInt(result.substring(result.lastIndexOf(".") + 1));
+
+            if (iMs < 100) {
+                iMs = 0;
+            } else {
+                iMs = iMs / 100;
+            }
+
+            result = result.substring(0, result.lastIndexOf(".") + 1) + String.valueOf(iMs);
         }
 
         return result;
