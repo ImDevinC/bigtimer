@@ -114,10 +114,6 @@ public class LapCounterFragment extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void setResizeImage(int id) {
-        imgResize.setImageDrawable(getResources().getDrawable(id));
-    }
-
     public void shrinkFont() {
         state = WindowState.NORMAL;
         imgResize.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_on));

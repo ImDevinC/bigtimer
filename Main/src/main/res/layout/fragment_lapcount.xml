@@ -10,7 +10,8 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:paddingLeft="10dp"
-        android:dividerHeight="0dp"/>
+        android:dividerHeight="0dp"
+        android:transcriptMode="alwaysScroll"/>
     <ImageView
         android:id="@+id/imgResize"
         android:layout_height="wrap_content"
